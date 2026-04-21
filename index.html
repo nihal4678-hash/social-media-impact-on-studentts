@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Social Media Impact — Students</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0c0c0f;
+    --surface: #141418;
+    --surface2: #1c1c22;
+    --border: rgba(255,255,255,0.07);
+    --border2: rgba(255,255,255,0.13);
+    --text: #f0eff6;
+    --muted: #7c7b8a;
+    --accent: #7f6df2;
+    --accent-dim: rgba(127,109,242,0.15);
+    --accent-glow: rgba(127,109,242,0.3);
+    --teal: #2dd4bf;
+    --teal-dim: rgba(45,212,191,0.12);
+    --coral: #f97066;
+    --coral-dim: rgba(249,112,102,0.12);
+    --amber: #fbbf24;
+    --amber-dim: rgba(251,191,36,0.12);
+    --green: #34d399;
+    --green-dim: rgba(52,211,153,0.12);
+    --radius: 14px;
+    --radius-sm: 8px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  /* ─── Layout ─── */
+  .shell {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    min-height: 100vh;
+  }
+
+  /* ─── Sidebar ─── */
+  .sidebar {
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    padding: 2rem 1.25rem;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 2.5rem;
+  }
+
+  .logo-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--accent);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .logo-icon svg { width: 18px; height: 18px; fill: none; stroke: #fff; stroke-width: 2; }
+
+  .logo-text {
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+    color: var(--text);
+    line-height: 1.2;
+  }
+
+  .logo-text span { display: block; font-size: 11px; font-weight: 400; color: var(--muted); font-family: 'DM Sans', sans-serif; }
+
+  .nav { display: flex; flex-direction: column; gap: 4px; }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-size: 14px;
+    color: var(--muted);
+    border: none;
+    background: transparent;
+    text-align: left;
+    width: 100%;
+    transition: all 0.15s;
+  }
+
+  .nav-item:hover { background: var(--surface2); color: var(--text); }
+
+  .nav-item.active {
+    background: var(--accent-dim);
+    color: var(--accent);
+    border: 1px solid var(--accent-glow);
+  }
+
+  .nav-item svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+  .nav-divider { height: 1px; background: var(--border); margin: 12px 0; }
+
+  .sidebar-footer {
+    margin-top: auto;
+    padding: 12px;
+    background: var(--surface2);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  .sidebar-footer strong { color: var(--text); display: block; margin-bottom: 2px; font-size: 13px; }
+
+  /* ─── Main ─── */
+  .main { background: var(--bg); overflow-y: auto; }
+
+  .topbar {
+    padding: 1.25rem 2rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--bg);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  .page-title { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 600; }
+  .page-sub { font-size: 13px; color: var(--muted); margin-top: 1px; }
+
+  .status-dot {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 12px;
+    color: var(--muted);
+    padding: 6px 12px;
+    background: var(--surface);
+    border-radius: 20px;
+    border: 1px solid var(--border);
+  }
+
+  .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--coral); }
+  .dot.on { background: var(--green); animation: pulse 2s infinite; }
+
+  @keyframes pulse {
+    0%,100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  .content { padding: 2rem; }
+
+  /* ─── Pages ─── */
+  .page { display: none; animation: fadein 0.2s ease; }
+  .page.active { display: block; }
+
+  @keyframes fadein { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+  /* ─── Cards ─── */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    margin-bottom: 16px;
+  }
+
+  .card-head {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 1.25rem;
+  }
+
+  /* ─── Form elements ─── */
+  .form-label { font-size: 13px; color: var(--muted); margin-bottom: 6px; display: block; }
+
+  .form-input {
+    width: 100%;
+    padding: 10px 14px;
+    background: var(--surface2);
+    border: 1px solid var(--border2);
+    border-radius: var(--radius-sm);
+    color: var(--text);
+    font-size: 14px;
+    font-family: 'DM Sans', sans-serif;
+    margin-bottom: 16px;
+    transition: border-color 0.15s;
+    outline: none;
+  }
+
+  .form-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-dim); }
+
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+  /* ─── Platform chips ─── */
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+
+  .chip {
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1px solid var(--border2);
+    background: transparent;
+    color: var(--muted);
+    font-size: 13px;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .chip:hover { border-color: var(--accent); color: var(--text); }
+
+  .chip.sel {
+    background: var(--accent-dim);
+    border-color: var(--accent);
+    color: #b3a9f8;
+    font-weight: 500;
+  }
+
+  /* ─── Range slider ─── */
+  .range-wrap { display: flex; align-items: center; gap: 14px; margin-bottom: 16px; }
+  .range-wrap label { font-size: 13px; color: var(--muted); white-space: nowrap; }
+
+  input[type=range] {
+    flex: 1;
+    -webkit-appearance: none;
+    height: 4px;
+    background: var(--surface2);
+    border-radius: 4px;
+    outline: none;
+    border: 1px solid var(--border2);
+  }
+
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    background: var(--accent);
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid var(--bg);
+  }
+
+  .range-val {
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--accent);
+    min-width: 36px;
+  }
+
+  /* ─── Impact buttons ─── */
+  .impact-row { display: flex; gap: 8px; margin-top: 6px; margin-bottom: 16px; }
+
+  .imp {
+    flex: 1;
+    padding: 8px 6px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border2);
+    background: transparent;
+    font-size: 13px;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    color: var(--muted);
+    text-align: center;
+    transition: all 0.15s;
+  }
+
+  .imp:hover { border-color: var(--border2); color: var(--text); background: var(--surface2); }
+  .imp.sel-pos { background: var(--green-dim); border-color: var(--green); color: var(--green); font-weight: 500; }
+  .imp.sel-neu { background: var(--amber-dim); border-color: var(--amber); color: var(--amber); font-weight: 500; }
+  .imp.sel-neg { background: var(--coral-dim); border-color: var(--coral); color: var(--coral); font-weight: 500; }
+
+  /* ─── Submit button ─── */
+  .btn-submit {
+    width: 100%;
+    padding: 13px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: 15px;
+    font-weight: 500;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    transition: opacity 0.15s, transform 0.1s;
+  }
+
+  .btn-submit:hover { opacity: 0.88; }
+  .btn-submit:active { transform: scale(0.98); }
+  .btn-submit:disabled { opacity: 0.45; cursor: not-allowed; }
+
+  .err-msg { color: var(--coral); font-size: 13px; margin-bottom: 12px; display: none; }
+
+  /* ─── Success ─── */
+  .success-box { text-align: center; padding: 3rem 1rem; }
+  .check-circle { width: 56px; height: 56px; border-radius: 50%; background: var(--green-dim); border: 1px solid var(--green); display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; }
+  .check-circle svg { width: 24px; height: 24px; stroke: var(--green); stroke-width: 2.5; fill: none; }
+  .success-title { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 600; margin-bottom: 8px; }
+  .success-sub { font-size: 14px; color: var(--muted); margin-bottom: 24px; }
+  .btn-outline { padding: 9px 20px; border-radius: var(--radius-sm); border: 1px solid var(--border2); background: transparent; color: var(--text); font-size: 14px; font-family: 'DM Sans', sans-serif; cursor: pointer; transition: all 0.15s; }
+  .btn-outline:hover { background: var(--surface2); border-color: var(--border2); }
+
+  /* ─── Dashboard metrics ─── */
+  .metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 20px; }
+
+  .metric-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+  }
+
+  .metric-label { font-size: 12px; color: var(--muted); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.6px; }
+  .metric-val { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 700; }
+  .metric-val.accent { color: var(--accent); }
+  .metric-val.teal { color: var(--teal); }
+  .metric-val.amber { color: var(--amber); }
+
+  /* ─── Bar chart ─── */
+  .bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 9px; }
+  .bar-lbl { font-size: 12px; color: var(--muted); width: 88px; text-align: right; flex-shrink: 0; }
+  .bar-track { flex: 1; height: 20px; background: var(--surface2); border-radius: 4px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 4px; transition: width 0.5s cubic-bezier(.4,0,.2,1); }
+  .bar-cnt { font-size: 12px; font-weight: 500; min-width: 20px; color: var(--text); }
+
+  /* ─── Impact pills ─── */
+  .pill-section { margin-bottom: 18px; }
+  .pill-sec-label { font-size: 12px; color: var(--muted); margin-bottom: 8px; }
+  .pill-row { display: flex; gap: 8px; flex-wrap: wrap; }
+  .pill { font-size: 12px; padding: 4px 12px; border-radius: 20px; font-weight: 500; border: 1px solid; }
+  .pill.pos { background: var(--green-dim); border-color: var(--green); color: var(--green); }
+  .pill.neu { background: var(--amber-dim); border-color: var(--amber); color: var(--amber); }
+  .pill.neg { background: var(--coral-dim); border-color: var(--coral); color: var(--coral); }
+
+  /* ─── AI analysis ─── */
+  .btn-ai {
+    width: 100%;
+    padding: 12px;
+    background: transparent;
+    border: 1px solid var(--teal);
+    color: var(--teal);
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-weight: 500;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    transition: all 0.15s;
+    margin-bottom: 16px;
+  }
+
+  .btn-ai:hover { background: var(--teal-dim); }
+  .btn-ai:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .ai-box { background: var(--surface2); border: 1px solid var(--border2); border-radius: var(--radius); padding: 1.5rem; display: none; }
+  .ai-badge { font-size: 11px; font-weight: 600; color: var(--teal); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 14px; }
+  .ai-content { font-size: 14px; line-height: 1.8; color: var(--text); }
+  .ai-content p { margin-bottom: 12px; }
+  .ai-content p:last-child { margin-bottom: 0; }
+
+  /* ─── Loader ─── */
+  .loader { display: none; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); padding: 12px 0; }
+  .spinner { width: 16px; height: 16px; border: 2px solid var(--border2); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.7s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ─── Responses table ─── */
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { text-align: left; padding: 10px 14px; color: var(--muted); font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.6px; border-bottom: 1px solid var(--border); background: var(--surface2); }
+  td { padding: 11px 14px; border-bottom: 1px solid var(--border); color: var(--text); vertical-align: middle; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: var(--surface2); }
+
+  .tag { display: inline-block; padding: 2px 9px; border-radius: 12px; font-size: 11px; font-weight: 500; border: 1px solid; }
+  .tag.pos { background: var(--green-dim); border-color: var(--green); color: var(--green); }
+  .tag.neu { background: var(--amber-dim); border-color: var(--amber); color: var(--amber); }
+  .tag.neg { background: var(--coral-dim); border-color: var(--coral); color: var(--coral); }
+
+  .empty-state { text-align: center; padding: 3rem; color: var(--muted); font-size: 14px; }
+
+  /* ─── Scrollbar ─── */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--surface2); border-radius: 4px; }
+
+  /* ─── Responsive ─── */
+  @media (max-width: 700px) {
+    .shell { grid-template-columns: 1fr; }
+    .sidebar { position: static; height: auto; flex-direction: row; flex-wrap: wrap; gap: 8px; padding: 1rem; }
+    .logo { margin-bottom: 0; }
+    .nav { flex-direction: row; flex-wrap: wrap; }
+    .sidebar-footer { display: none; }
+    .metrics { grid-template-columns: 1fr 1fr; }
+    .content { padding: 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="shell">
+
+  <!-- ─── Sidebar ─── -->
+  <aside class="sidebar">
+    <div class="logo">
+      <div class="logo-icon">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3"/><path d="M6 20v-2a6 6 0 0112 0v2"/><path d="M18 8a6 6 0 01-12 0"/></svg>
+      </div>
+      <div class="logo-text">Socialmedia Impact
+        <span>Student Research </span>
+      </div>
+    </div>
+
+    <nav class="nav">
+      <button class="nav-item active" onclick="showPage('survey',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+        Submit survey
+      </button>
+      <button class="nav-item" onclick="showPage('dashboard',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        Analytics
+      </button>
+      <button class="nav-item" onclick="showPage('responses',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg>
+        All responses
+      </button>
+    </nav>
+
+    <div class="nav-divider"></div>
+
+    <div class="sidebar-footer">
+      <strong>Backend status</strong>
+      Connected to <code>localhost:4000</code><br>
+      Data persists in memory.
+    </div>
+  </aside>
+
+  <!-- ─── Main ─── -->
+  <div class="main">
+    <div class="topbar">
+      <div>
+        <div class="page-title" id="topbar-title">Student survey</div>
+        <div class="page-sub">Fill in your details and submit</div>
+      </div>
+      <div class="status-dot">
+        <div class="dot" id="status-dot"></div>
+        <span id="status-text">Checking backend…</span>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- ═══ SURVEY PAGE ═══ -->
+      <div id="page-survey" class="page active">
+        <div id="form-wrap">
+          <div class="card">
+            <div class="card-head">Personal details</div>
+            <label class="form-label">Your name</label>
+            <input class="form-input" id="f-name" type="text" placeholder="e.g. Priya Nair">
+            <div class="row2">
+              <div>
+                <label class="form-label">Age</label>
+                <input class="form-input" id="f-age" type="number" placeholder="16" min="10" max="25">
+              </div>
+              <div>
+                <label class="form-label">Grade / class</label>
+                <input class="form-input" id="f-grade" type="text" placeholder="e.g. 11th / B.Sc 1st year">
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head">Platforms you use</div>
+            <div class="chips" id="chips">
+              <button class="chip" onclick="toggleChip(this,'Instagram')">Instagram</button>
+              <button class="chip" onclick="toggleChip(this,'YouTube')">YouTube</button>
+              <button class="chip" onclick="toggleChip(this,'TikTok')">TikTok</button>
+              <button class="chip" onclick="toggleChip(this,'Twitter/X')">Twitter/X</button>
+              <button class="chip" onclick="toggleChip(this,'Snapchat')">Snapchat</button>
+              <button class="chip" onclick="toggleChip(this,'Facebook')">Facebook</button>
+              <button class="chip" onclick="toggleChip(this,'WhatsApp')">WhatsApp</button>
+              <button class="chip" onclick="toggleChip(this,'Reddit')">Reddit</button>
+              <button class="chip" onclick="toggleChip(this,'Telegram')">Telegram</button>
+              <button class="chip" onclick="toggleChip(this,'Pinterest')">Pinterest</button>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head">Daily usage</div>
+            <div class="range-wrap">
+              <label>Hours per day</label>
+              <input type="range" id="hours-slider" min="0" max="12" step="0.5" value="2"
+                oninput="document.getElementById('hours-val').textContent=parseFloat(this.value).toFixed(1)+'h'">
+              <span class="range-val" id="hours-val">2.0h</span>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head">Impact on you</div>
+            <label class="form-label">Academic performance</label>
+            <div class="impact-row" id="ir-acad">
+              <button class="imp" onclick="pickImpact('acad','positive',this)">Positive</button>
+              <button class="imp sel-neu" onclick="pickImpact('acad','neutral',this)">Neutral</button>
+              <button class="imp" onclick="pickImpact('acad','negative',this)">Negative</button>
+            </div>
+
+            <label class="form-label">Mental health / mood</label>
+            <div class="impact-row" id="ir-mental">
+              <button class="imp" onclick="pickImpact('mental','positive',this)">Positive</button>
+              <button class="imp sel-neu" onclick="pickImpact('mental','neutral',this)">Neutral</button>
+              <button class="imp" onclick="pickImpact('mental','negative',this)">Negative</button>
+            </div>
+
+            <label class="form-label">Sleep quality</label>
+            <div class="impact-row" id="ir-sleep">
+              <button class="imp" onclick="pickImpact('sleep','positive',this)">Positive</button>
+              <button class="imp sel-neu" onclick="pickImpact('sleep','neutral',this)">Neutral</button>
+              <button class="imp" onclick="pickImpact('sleep','negative',this)">Negative</button>
+            </div>
+          </div>
+
+          <div class="err-msg" id="form-err"></div>
+          <div class="loader" id="submit-loader"><div class="spinner"></div> Submitting to backend…</div>
+          <button class="btn-submit" id="submit-btn" onclick="submitSurvey()">Submit response</button>
+        </div>
+
+        <div id="success-box" style="display:none">
+          <div class="card success-box">
+            <div class="check-circle">
+              <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <div class="success-title">Response saved!</div>
+            <div class="success-sub">Your data has been stored in the backend.<br>Head to Analytics to see insights.</div>
+            <button class="btn-outline" onclick="resetSurvey()">Submit another response</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ DASHBOARD PAGE ═══ -->
+      <div id="page-dashboard" class="page">
+        <div class="metrics" id="metrics-row">
+          <div class="metric-card"><div class="metric-label">Total responses</div><div class="metric-val accent" id="d-total">—</div></div>
+          <div class="metric-card"><div class="metric-label">Avg hours/day</div><div class="metric-val teal" id="d-avg">—</div></div>
+          <div class="metric-card"><div class="metric-label">Platforms tracked</div><div class="metric-val amber" id="d-plt">—</div></div>
+        </div>
+
+        <div class="card">
+          <div class="card-head">Platform usage</div>
+          <div id="bar-chart"><div class="empty-state">No data yet — submit responses first.</div></div>
+        </div>
+
+        <div class="card">
+          <div class="card-head">Impact breakdown</div>
+          <div id="impact-pills"><div class="empty-state">No data yet.</div></div>
+        </div>
+
+        <button class="btn-ai" id="ai-btn" onclick="runAI()" disabled>Generate AI analysis (Claude)</button>
+        <div class="loader" id="ai-loader"><div class="spinner"></div> Claude is analyzing the data…</div>
+        <div class="ai-box" id="ai-box">
+          <div class="ai-badge">Claude AI analysis</div>
+          <div class="ai-content" id="ai-content"></div>
+        </div>
+      </div>
+
+      <!-- ═══ RESPONSES PAGE ═══ -->
+      <div id="page-responses" class="page">
+        <div class="card" style="padding:0;overflow:hidden">
+          <div class="table-wrap">
+            <table id="resp-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Age</th>
+                  <th>Grade</th>
+                  <th>Hours/day</th>
+                  <th>Academic</th>
+                  <th>Mental health</th>
+                  <th>Sleep</th>
+                  <th>Platforms</th>
+                </tr>
+              </thead>
+              <tbody id="resp-body">
+                <tr><td colspan="8" class="empty-state">No responses yet.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  const API = 'http://localhost:4000/api';
+  const selectedPlatforms = [];
+  const impacts = { acad: 'neutral', mental: 'neutral', sleep: 'neutral' };
+  const BAR_COLORS = ['#7f6df2','#2dd4bf','#f97066','#fbbf24','#34d399','#60a5fa','#f472b6','#a78bfa','#fb923c','#94a3b8'];
+
+  // ── Status check ──────────────────────────────────────────────────────────
+  async function checkBackend() {
+    try {
+      const r = await fetch(API + '/stats');
+      if (r.ok) {
+        document.getElementById('status-dot').classList.add('on');
+        document.getElementById('status-text').textContent = 'Backend connected';
+      } else throw new Error();
+    } catch {
+      document.getElementById('status-text').textContent = 'Backend offline';
+    }
+  }
+
+  // ── Navigation ─────────────────────────────────────────────────────────────
+  const titles = { survey: 'Student survey', dashboard: 'Analytics dashboard', responses: 'All responses' };
+  const subs   = { survey: 'Fill in your details and submit', dashboard: 'Aggregated stats and AI insights', responses: 'Every submitted response' };
+
+  function showPage(name, btn) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+    document.getElementById('page-' + name).classList.add('active');
+    btn.classList.add('active');
+    document.getElementById('topbar-title').textContent = titles[name];
+    document.querySelector('.page-sub').textContent = subs[name];
+    if (name === 'dashboard') loadDashboard();
+    if (name === 'responses') loadResponses();
+  }
+
+  // ── Chips ──────────────────────────────────────────────────────────────────
+  function toggleChip(btn, name) {
+    const idx = selectedPlatforms.indexOf(name);
+    if (idx > -1) { selectedPlatforms.splice(idx, 1); btn.classList.remove('sel'); }
+    else { selectedPlatforms.push(name); btn.classList.add('sel'); }
+  }
+
+  // ── Impact picker ──────────────────────────────────────────────────────────
+  function pickImpact(group, value, btn) {
+    const row = btn.parentElement;
+    row.querySelectorAll('.imp').forEach(b => b.className = 'imp');
+    impacts[group] = value;
+    const cls = value === 'positive' ? 'sel-pos' : value === 'negative' ? 'sel-neg' : 'sel-neu';
+    btn.classList.add(cls);
+  }
+
+  // ── Submit survey ──────────────────────────────────────────────────────────
+  async function submitSurvey() {
+    const name = document.getElementById('f-name').value.trim();
+    const errEl = document.getElementById('form-err');
+    errEl.style.display = 'none';
+
+    if (!name || selectedPlatforms.length === 0) {
+      errEl.textContent = 'Please enter your name and select at least one platform.';
+      errEl.style.display = 'block';
+      return;
+    }
+
+    const payload = {
+      name,
+      age: document.getElementById('f-age').value,
+      grade: document.getElementById('f-grade').value,
+      platforms: [...selectedPlatforms],
+      hoursPerDay: parseFloat(document.getElementById('hours-slider').value),
+      academicImpact: impacts.acad,
+      mentalHealthImpact: impacts.mental,
+      sleepImpact: impacts.sleep
+    };
+
+    document.getElementById('submit-btn').disabled = true;
+    document.getElementById('submit-loader').style.display = 'flex';
+
+    try {
+      const res = await fetch(API + '/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      if (!res.ok) throw new Error();
+      document.getElementById('form-wrap').style.display = 'none';
+      document.getElementById('success-box').style.display = 'block';
+    } catch {
+      errEl.textContent = 'Submission failed. Is the backend server running on port 4000?';
+      errEl.style.display = 'block';
+      document.getElementById('submit-btn').disabled = false;
+    }
+    document.getElementById('submit-loader').style.display = 'none';
+  }
+
+  // ── Reset survey ──────────────────────────────────────────────────────────
+  function resetSurvey() {
+    document.getElementById('f-name').value = '';
+    document.getElementById('f-age').value = '';
+    document.getElementById('f-grade').value = '';
+    selectedPlatforms.length = 0;
+    impacts.acad = impacts.mental = impacts.sleep = 'neutral';
+    document.querySelectorAll('.chip').forEach(c => c.classList.remove('sel'));
+    document.getElementById('hours-slider').value = 2;
+    document.getElementById('hours-val').textContent = '2.0h';
+    ['acad','mental','sleep'].forEach(g => {
+      const row = document.getElementById('ir-' + g);
+      row.querySelectorAll('.imp').forEach((b,i) => {
+        b.className = 'imp';
+        if (i === 1) b.classList.add('sel-neu');
+      });
+    });
+    document.getElementById('form-wrap').style.display = 'block';
+    document.getElementById('success-box').style.display = 'none';
+    document.getElementById('submit-btn').disabled = false;
+    document.getElementById('form-err').style.display = 'none';
+  }
+
+  // ── Dashboard ─────────────────────────────────────────────────────────────
+  async function loadDashboard() {
+    try {
+      const res = await fetch(API + '/stats');
+      const data = await res.json();
+      const s = data.stats;
+
+      document.getElementById('d-total').textContent = data.total || 0;
+      document.getElementById('d-avg').textContent = s ? s.avgHoursPerDay + 'h' : '—';
+      document.getElementById('d-plt').textContent = s ? Object.keys(s.platformCount).length : 0;
+
+      if (!s) return;
+
+      // Platform bars
+      const entries = Object.entries(s.platformCount).sort((a,b) => b[1]-a[1]);
+      const maxV = Math.max(...entries.map(e => e[1]));
+      document.getElementById('bar-chart').innerHTML = entries.map((e,i) => `
+        <div class="bar-row">
+          <span class="bar-lbl">${e[0]}</span>
+          <div class="bar-track"><div class="bar-fill" style="width:${Math.round((e[1]/maxV)*100)}%;background:${BAR_COLORS[i%10]}"></div></div>
+          <span class="bar-cnt">${e[1]}</span>
+        </div>
+      `).join('');
+
+      // Impact pills
+      function pillsHtml(data, label) {
+        const total = Object.values(data).reduce((a,b) => a+b, 0) || 1;
+        const pills = [['positive','pos'],['neutral','neu'],['negative','neg']].map(([k,cls]) =>
+          `<span class="pill ${cls}">${k}: ${data[k]} (${Math.round((data[k]/total)*100)}%)</span>`
+        ).join('');
+        return `<div class="pill-section"><div class="pill-sec-label">${label}</div><div class="pill-row">${pills}</div></div>`;
+      }
+
+      document.getElementById('impact-pills').innerHTML =
+        pillsHtml(s.academicImpact, 'Academic performance') +
+        pillsHtml(s.mentalHealthImpact, 'Mental health') +
+        pillsHtml(s.sleepImpact, 'Sleep quality');
+
+      document.getElementById('ai-btn').disabled = false;
+    } catch {
+      document.getElementById('bar-chart').innerHTML = '<div class="empty-state">Cannot reach backend. Start the server first.</div>';
+    }
+  }
+
+  // ── AI analysis ───────────────────────────────────────────────────────────
+  async function runAI() {
+    const btn = document.getElementById('ai-btn');
+    const loader = document.getElementById('ai-loader');
+    btn.disabled = true;
+    btn.textContent = 'Analyzing…';
+    loader.style.display = 'flex';
+    document.getElementById('ai-box').style.display = 'none';
+
+    try {
+      const statsRes = await fetch(API + '/stats');
+      const statsData = await statsRes.json();
+
+      const res = await fetch(API + '/analyze', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ stats: statsData.stats })
+      });
+      const data = await res.json();
+      const text = data.analysis || data.error || 'No analysis returned.';
+      document.getElementById('ai-content').innerHTML = text.split('\n\n').map(p => `<p>${p}</p>`).join('');
+      document.getElementById('ai-box').style.display = 'block';
+    } catch {
+      document.getElementById('ai-content').innerHTML = '<p>Could not connect to the AI backend. Make sure ANTHROPIC_API_KEY is set and the server is running.</p>';
+      document.getElementById('ai-box').style.display = 'block';
+    }
+
+    loader.style.display = 'none';
+    btn.textContent = 'Regenerate AI analysis (Claude)';
+    btn.disabled = false;
+  }
+
+  // ── Responses table ───────────────────────────────────────────────────────
+  async function loadResponses() {
+    try {
+      const res = await fetch(API + '/responses');
+      const data = await res.json();
+      const tbody = document.getElementById('resp-body');
+
+      if (!data.responses || data.responses.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="8" class="empty-state">No responses yet.</td></tr>';
+        return;
+      }
+
+      const tagCls = v => v === 'positive' ? 'pos' : v === 'negative' ? 'neg' : 'neu';
+
+      tbody.innerHTML = [...data.responses].reverse().map(r => `
+        <tr>
+          <td>${r.name}</td>
+          <td>${r.age || '—'}</td>
+          <td>${r.grade || '—'}</td>
+          <td>${parseFloat(r.hoursPerDay).toFixed(1)}h</td>
+          <td><span class="tag ${tagCls(r.academicImpact)}">${r.academicImpact}</span></td>
+          <td><span class="tag ${tagCls(r.mentalHealthImpact)}">${r.mentalHealthImpact}</span></td>
+          <td><span class="tag ${tagCls(r.sleepImpact)}">${r.sleepImpact}</span></td>
+          <td style="font-size:12px;color:var(--muted)">${r.platforms.join(', ')}</td>
+        </tr>
+      `).join('');
+    } catch {
+      document.getElementById('resp-body').innerHTML = '<tr><td colspan="8" class="empty-state">Cannot reach backend.</td></tr>';
+    }
+  }
+
+  checkBackend();
+</script>
+</body>
+</html>

@@ -1,4 +1,4 @@
-# SocialScope — Social Media Impact on Students
+# Socialmedia — Social Media Impact on Students
 
 A full-stack research tool: dark-themed HTML/CSS/JS frontend + Express backend + Claude AI.
 
